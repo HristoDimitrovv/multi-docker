@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Build and test React app
+      run: |
+        docker build -t root700/react-test -f ./client/Dockerfile.dev ./client
+        docker run -e CI=true root700/react-test npm run test -- --coverage
+
+    - name: Build and push Docker images
+      run: |
+        docker build -t root700/multi-client:latest ./client
+        docker build -t root700/multi-worker:latest ./worker
+        docker build -t root700/multi-nginx:latest ./nginx
+        docker build -t root700/multi-server:latest ./server
+        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+        docker push root700/multi-client:latest
+        docker push root700/multi-worker:latest
+        docker push root700/multi-nginx:latest
+        docker push root700/multi-server:latest
+      env:
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_ID: ${{ secrets.DOCKER_ID }}
+
