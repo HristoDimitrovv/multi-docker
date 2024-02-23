@@ -15,7 +15,7 @@ after_success:
   - docker build -t root700/multi-server:latest ./server
 
   #Log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u root700 --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push root700/multi-client:latest
   - docker push root700/multi-worker:latest
   - docker push root700/multi-nginx:latest
