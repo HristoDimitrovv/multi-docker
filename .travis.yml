@@ -9,14 +9,14 @@ script:
   - docker run -e CI=true root700/react-test npm run test -- --coverage
 
 after_success:
-  - docker build -t root700/multi-client ./client
-  - docker build -t root700/multi-worker ./worker
-  - docker build -t root700/multi-nginx ./nginx
-  - docker build -t root700/multi-server ./server
+  - docker build -t "$DOCKER_ID"/multi-client ./client
+  - docker build -t "$DOCKER_ID"/multi-worker ./worker
+  - docker build -t "$DOCKER_ID"/multi-nginx ./nginx
+  - docker build -t "$DOCKER_ID"/multi-server ./server
 
   #Log in to docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push root700/multi-client:latest
-  - docker push root700/multi-worker:latest
-  - docker push root700/multi-nginx:latest
-  - docker push root700/multi-server:latest
+  - docker push "$DOCKER_ID"/multi-client:latest
+  - docker push "$DOCKER_ID"/multi-worker:latest
+  - docker push "$DOCKER_ID"/multi-nginx:latest
+  - docker push "$DOCKER_ID"/multi-server:latest
