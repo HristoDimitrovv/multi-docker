@@ -3,10 +3,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t root700//react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t root700/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true root700//react-test npm run test -- --coverage
+  - docker run -e CI=true root700/react-test npm run test -- --coverage
 
 after_success:
   - docker build -t root700//multi-client ./client
